@@ -6,14 +6,23 @@ import org.simplejavamail.mailer.Mailer;
 import org.simplejavamail.mailer.MailerBuilder;
 import org.simplejavamail.mailer.config.TransportStrategy;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @EnableAutoConfiguration
+@ControllerAdvice
 public class EmailController {
+
+    /**
+     * Global exception handling for this controller
+     */
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Object> exception(Exception exception) {
+        return new ResponseEntity<>("Failed to send email!\n"
+                +exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     @RequestMapping(value="/email", method=RequestMethod.POST)
     public String sendEmail(@RequestParam String hostPassword, @RequestParam String host,
@@ -23,10 +32,18 @@ public class EmailController {
         return "Email sent!";
     }
 
+    /**
+     * Sends an email using the SimpleJavaMail library
+     * @param hostPassword the login password for host's email account
+     * @param host Email address of the host
+     * @param destination Email address to send
+     * @param subject Email subject
+     * @param content Email message
+     */
     private void sendSimpleMail(String hostPassword, String host, String destination, String subject, String content) {
         Email email = EmailBuilder.startingBlank()
-                .from("nikiforos1", host)
-                .to("nikiforos2", destination)
+                .from("person1", host)
+                .to("person2", destination)
                 .withSubject(subject)
                 .withPlainText(content)
                 .buildEmail();
