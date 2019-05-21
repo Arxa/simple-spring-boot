@@ -17,15 +17,15 @@ repositories {
 sourceSets {
     main {
         java {
-            srcDirs = ['manager/src/main']
+            srcDirs = ['notification-manager/manager/src/main']
         }
         resources {
-            srcDirs = ['manager/src/resources']
+            srcDirs = ['notification-manager/manager/src/resources']
         }
     }
     test {
         java {
-            srcDirs = ['manager/tests']
+            srcDirs = ['notification-manager/manager/tests']
         }
     }
 }
